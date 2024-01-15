@@ -1,0 +1,39 @@
+---
+title: 'Routers'
+description: 'Control Your API Calls'
+---
+
+<Info>
+  Routers are in active development.
+</Info>
+
+## Introduction
+
+Routers are a core concept in Glide. They are most easily thought of a pools of models that execute predefine logic on your API calls.
+There are more details on each router below but first let's look at a simple example.
+
+## Example: Deploy a Resilience Router
+
+A Resilience Router provides failover logic should a target model not be available. Below are building a router called `my-chat-router`.
+'my-chat-router' is defined as a `language` router which accesses the `/chat` endpoints for supported providers. Additionally, we've specified this router to 
+have a `priority` strategy which implements failover logic.
+
+This router will first try Openai (default model: `gpt-3.5-turbo`) once the router token budget has been drawn down (more info below) the router will failover to 
+an Azure OpenAI deployment.
+
+
+```yaml
+routers:
+  language:
+    - id: my-chat-router
+      strategy: priority # round-robin, weighted-round-robin, priority, least-latency, priority, etc.
+      models:
+        - id: openai
+          openai:
+            api_key: "XXXXXXXXX"
+        - id: azureopenai
+          azureopenai:
+            api_key: "XXXXXX"
+            model: "glide-GPT-35"
+            base_url: "https://mydeployment.openai.azure.com/"
+```
