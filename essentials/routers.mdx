@@ -44,6 +44,10 @@ routers:
 
 ## Failover
 
+Unlike other LLM routers, the failover router employs a token bucket based failover strategy to reduce the latency on primary model failure. When a failure occurs, the router directs the API call to the secondary model instead of retrying the primary. **The entire service instance keeps track of the number of failures for a specific model.** Once that number surpasses a certain threshold, the model is "disqualified" from serving requests for a temporary period. This proactive approach involves removing the problematic model from the pool as soon as it experiences issues, ensuring that subsequent requests are handled by healthy models only, significantly improving latency during failover compared to alternative methods.
+
+The router comes with a handy and flexible abstraction called error budget. Error budget is a number of errors you allow to tolerate before calling the model unhealthy and is defined in errors/second. As a final measure the router employs retries with backoff. This is done explicitly only when we have no other choice - such as all configured models are down. 
+
 ## Round-Robin
 
 ## Weighted Round-Robin
