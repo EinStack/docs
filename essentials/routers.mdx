@@ -30,10 +30,10 @@ routers:
     - id: my-chat-router
       strategy: priority # round-robin, weighted-round-robin, least-latency, priority, etc.
       models:
-        - id: openai
+        - id: primary
           openai:
             api_key: "XXXXXXXXX"
-        - id: azureopenai
+        - id: secondary
           azureopenai:
             api_key: "XXXXXX"
             model: "glide-GPT-35"
