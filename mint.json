@@ -59,6 +59,7 @@
     {
       "group": "Essentials",
       "pages": [
+        "essentials/configuration",
         "essentials/routers"
       ]
     },

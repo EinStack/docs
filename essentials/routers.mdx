@@ -21,12 +21,14 @@ have a `priority` strategy which implements failover logic.
 This router will first try Openai (default model: `gpt-3.5-turbo`) once the router token budget has been drawn down (more info below) the router will failover to 
 an Azure OpenAI deployment.
 
+Simple as that! Below we will cover each router in detail.
+
 
 ```yaml
 routers:
   language:
     - id: my-chat-router
-      strategy: priority # round-robin, weighted-round-robin, priority, least-latency, priority, etc.
+      strategy: priority # round-robin, weighted-round-robin, least-latency, priority, etc.
       models:
         - id: openai
           openai:
@@ -37,3 +39,13 @@ routers:
             model: "glide-GPT-35"
             base_url: "https://mydeployment.openai.azure.com/"
 ```
+
+
+
+## Failover
+
+## Round-Robin
+
+## Weighted Round-Robin
+
+## Least Latency

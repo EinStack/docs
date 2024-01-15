@@ -1,0 +1,37 @@
+---
+title: 'Configuration'
+description: 'How to Configure the Gateway'
+---
+
+Below details how to configure gateway. For more information on router types see the router page.
+
+## Basic Configuration
+
+At its simplest the gateway can be configured with a single router and two models.
+
+This example shows a failover router leveraging OpenAI and Azure OpenAI. For OpenAI, Cohere, and OctoML, only an API key needs to be provided.
+All other parameters, including the model, are provided by default. For Azure OpenAI, a model and base_url must be specified.
+
+- `language` - This is the language API endpoint which supporta `/chat` endpoints from model providers
+- `id` - A unique id for your router
+- `strategy` - The type of router can be round-robin, weighted-round-robin, least-latency, priority
+- `models/id` - **TODO: what values can this be?**
+
+
+```yaml
+routers:
+  language:
+    - id: my-chat-router
+      strategy: priority
+      models:
+        - id: openai
+          openai:
+            api_key: "XXXXXXXXX"
+        - id: azureopenai
+          azureopenai:
+            api_key: "XXXXXX"
+            model: "glide-GPT-35" # the Azure OpenAI deployment name
+            base_url: "https://mydeployment.openai.azure.com/" # the name of your Azure OpenAI Resource
+```
+
+## Advanced Configuration
