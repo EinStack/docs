@@ -15,8 +15,7 @@ All other parameters, including the model, are provided by default. For Azure Op
 - `language` - This is the language API endpoint which supporta `/chat` endpoints from model providers
 - `id` - A unique id for your router
 - `strategy` - The type of router can be round-robin, weighted-round-robin, least-latency, priority
-- `models/id` - **TODO: what values can this be?**
-
+- `models/id` - **TODO: what values can this be?** A unique ID for the model configuration
 
 ```yaml
 routers:
@@ -24,10 +23,10 @@ routers:
     - id: my-chat-router
       strategy: priority
       models:
-        - id: openai
+        - id: primary
           openai:
             api_key: "XXXXXXXXX"
-        - id: azureopenai
+        - id: secondary
           azureopenai:
             api_key: "XXXXXX"
             model: "glide-GPT-35" # the Azure OpenAI deployment name
@@ -35,3 +34,29 @@ routers:
 ```
 
 ## Advanced Configuration
+
+Additional, parameters can be specified in the configuration as well. Refer to the `Providers` page for more information on paramters.
+
+    ```yaml
+    routers:
+    language:
+        - id: my-chat-router
+        strategy: priority
+        models:
+            - id: primary
+            openai:
+                model: "gpt-4-1106-turbo"
+                api_key: "XXXXXXXXX"
+                default_params:
+                    temperature: 0
+                    max_tokens: 250
+
+            - id: secondary
+            azureopenai:
+                api_key: "XXXXXX"
+                model: "glide-GPT-35" # the Azure OpenAI deployment name
+                base_url: "https://mydeployment.openai.azure.com/" # the name of your Azure OpenAI Resource
+                default_params:
+                    temperature: 0.2
+                    max_tokens: 250
+    ```
