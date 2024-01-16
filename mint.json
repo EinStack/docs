@@ -67,5 +67,5 @@
   "footerSocials": {
     "github": "https://github.com/EinStack"
   },
-    "openapi": "https://github.com/EinStack/glide/blob/develop/docs/swagger.yaml"
+    "openapi": ["api-reference/openapi.yaml"]
 }
