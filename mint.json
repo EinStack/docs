@@ -57,11 +57,15 @@
     {
       "group": "API Documentation",
       "pages": [
-        "api-reference/introduction"
+        "api-reference/introduction",
+        "api-reference/language/language-router-list",
+        "api-reference/language/language-chat",
+        "api-reference/operations/gateway-health"
       ]
     }
   ],
   "footerSocials": {
     "github": "https://github.com/EinStack"
-  }
+  },
+    "openapi": "https://github.com/EinStack/glide/blob/develop/docs/swagger.yaml"
 }
