@@ -38,25 +38,97 @@ routers:
 Additional, parameters can be specified in the configuration as well. Refer to the `Providers` page for more information on paramters.
 
     ```yaml
-    routers:
-    language:
-        - id: my-chat-router
-        strategy: priority
-        models:
-            - id: primary
-            openai:
-                model: "gpt-4-1106-turbo"
-                api_key: "XXXXXXXXX"
-                default_params:
-                    temperature: 0
-                    max_tokens: 250
+    telemetry:
+  logging:
+    level: info
+    encoding: console # console, json
+  # other configs
 
-            - id: secondary
-            azureopenai:
-                api_key: "XXXXXX"
-                model: "glide-GPT-35" # the Azure OpenAI deployment name
-                base_url: "https://mydeployment.openai.azure.com/" # the name of your Azure OpenAI Resource
-                default_params:
-                    temperature: 0.2
-                    max_tokens: 250
+api:
+  http:
+    listen_addr: 0.0.0.0:7685
+    max_body_size: "2Mi"
+    tls:
+      ca_path:
+      cert_path:
+    # other configs
+
+  grpc:
+    listen_addr: 0.0.0.0:7686
+    tls:
+      ca_path:
+      cert_path:
+    # other configs
+
+routes:
+  language:
+    - id: openai-pool
+      strategy: priority # round-robin, weighted-round-robin, priority, least-latency, priority, etc.
+      models:
+        - id: openai-boring
+          openai: # anthropic, azureopenai, gemini, other providers we support
+            model: gpt-3.5-turbo
+            api_key: ${env:OPENAI_API_KEY}
+            default_params:
+              temperature: 0
+
+        - id: anthropic-boring
+          anthropic:
+            model: claude-2
+            apiKey: ${env:ANTHROPIC_API_KEY}
+            default_params: # set the default request params
+              temperature: 0
+
+    - id: latency-critical-pool
+      strategy: least-latency
+      models:
+        - id: openai-boring
+          timeout_ms: 200
+          openai:
+            model: gpt-3.5-turbo
+            api_key: ${env:OPENAI_API_KEY}
+         
+        - id: anthropic-boring
+          timeout_ms: 200
+          anthropic:
+            api_key: ${env:ANTHROPIC_API_KEY}
+
+    - id: anthropic
+      strategy: weighted-round-robin
+      models:
+        - id: openai
+          weight: 30
+          openai:
+            api_key: ${env:OPENAI_API_KEY}
+        - id: anthropic
+          weight: 70
+          anthropic:
+            api_key: ${env:ANTHROPIC_API_KEY}
+
+    - id: ab-test1
+      strategy: weighted-round-robin
+      models:
+        - id: openai-gpt4
+          weight: 50
+          openai:
+            model: gpt-4
+            api_key: ${env:OPENAI_API_KEY}
+            default_params:
+              temperature: 0.7
+
+        - id: openai-chatgpt
+          weight: 50
+          openai:
+            model: gpt-3.5-turbo
+            api_key: ${env:OPENAI_API_KEY}
+            default_params:
+              temperature: 0.7
+
+        # we want to use OpenAI only in this A/B test, but that's bad resiliency wise
+        # so add Anthropic just in case OpenAI is down
+        - id: anthropic-fallback
+          weight: 0
+          anthropic:
+            model: claude-2
+            api_key: ${env:ANTHROPIC_API_KEY}
     ```

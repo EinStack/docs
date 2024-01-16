@@ -29,8 +29,8 @@
   ],
   "anchors": [
     {
-      "name": "Documentation",
-      "icon": "book-open-cover",
+      "name": "GitHub",
+      "icon": "github",
       "url": "https://github.com/EinStack/glide/tree/develop"
     },
     {
@@ -43,8 +43,7 @@
     {
       "group": "Get Started",
       "pages": [
-        "introduction",
-        "quickstart"
+        "introduction"
       ]
     },
     {
