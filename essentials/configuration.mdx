@@ -37,12 +37,11 @@ routers:
 
 Additional, parameters can be specified in the configuration as well. Refer to the `Providers` page for more information on paramters.
 
-    ```yaml
-    telemetry:
+```yaml
+telemetry:
   logging:
-    level: info
-    encoding: console # console, json
-  # other configs
+    level: debug  # debug, info, warn, error, fatal
+    encoding: console
 
 api:
   http:
@@ -53,82 +52,49 @@ api:
       cert_path:
     # other configs
 
-  grpc:
-    listen_addr: 0.0.0.0:7686
-    tls:
-      ca_path:
-      cert_path:
-    # other configs
-
 routes:
-  language:
-    - id: openai-pool
-      strategy: priority # round-robin, weighted-round-robin, priority, least-latency, priority, etc.
-      models:
-        - id: openai-boring
-          openai: # anthropic, azureopenai, gemini, other providers we support
-            model: gpt-3.5-turbo
-            api_key: ${env:OPENAI_API_KEY}
-            default_params:
-              temperature: 0
+language:
+- id: openai-pool
+  strategy: priority # round-robin, weighted-round-robin, priority, least-latency, priority, etc.
+  models:
+    - id: primary
+      openai: # cohere, azureopenai, gemini, other providers we support
+        model: gpt-3.5-turbo
+        api_key: ${env:OPENAI_API_KEY}
+        default_params:
+          temperature: 0.1
 
-        - id: anthropic-boring
-          anthropic:
-            model: claude-2
-            apiKey: ${env:ANTHROPIC_API_KEY}
-            default_params: # set the default request params
-              temperature: 0
+    - id: secondary
+      cohere:
+        model: command-light
+        apiKey: ${env:COHERE_API_KEY}
+        default_params: # set the default request params
+          temperature: 0.1
 
-    - id: latency-critical-pool
-      strategy: least-latency
-      models:
-        - id: openai-boring
-          timeout_ms: 200
-          openai:
-            model: gpt-3.5-turbo
-            api_key: ${env:OPENAI_API_KEY}
-         
-        - id: anthropic-boring
-          timeout_ms: 200
-          anthropic:
-            api_key: ${env:ANTHROPIC_API_KEY}
+- id: latency-critical-pool
+  strategy: least-latency
+  models:
+    - id: primary
+      timeout_ms: 200
+      openai:
+        model: gpt-3.5-turbo
+        api_key: ${env:OPENAI_API_KEY}
+     
+    - id: secondary
+      timeout_ms: 200
+      cohere:
+        api_key: ${env:COHERE_API_KEY}
 
-    - id: anthropic
-      strategy: weighted-round-robin
-      models:
-        - id: openai
-          weight: 30
-          openai:
-            api_key: ${env:OPENAI_API_KEY}
-        - id: anthropic
-          weight: 70
-          anthropic:
-            api_key: ${env:ANTHROPIC_API_KEY}
+- id: cohere-openai-ab-test
+  strategy: weighted-round-robin
+  models:
+    - id: openai
+      weight: 30
+      openai:
+        api_key: ${env:OPENAI_API_KEY}
+    - id: cohere
+      weight: 70
+      cohere:
+        api_key: ${env:COHERE_API_KEY}
 
-    - id: ab-test1
-      strategy: weighted-round-robin
-      models:
-        - id: openai-gpt4
-          weight: 50
-          openai:
-            model: gpt-4
-            api_key: ${env:OPENAI_API_KEY}
-            default_params:
-              temperature: 0.7
-
-        - id: openai-chatgpt
-          weight: 50
-          openai:
-            model: gpt-3.5-turbo
-            api_key: ${env:OPENAI_API_KEY}
-            default_params:
-              temperature: 0.7
-
-        # we want to use OpenAI only in this A/B test, but that's bad resiliency wise
-        # so add Anthropic just in case OpenAI is down
-        - id: anthropic-fallback
-          weight: 0
-          anthropic:
-            model: claude-2
-            api_key: ${env:ANTHROPIC_API_KEY}
     ```
