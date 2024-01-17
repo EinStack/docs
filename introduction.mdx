@@ -72,7 +72,7 @@ Currently the only supported deployment is via container.
   # Build
   RUN go build -o ./dist/glide
 
-  # port should match define in pkg/api/http/config.go. Eventually this will be specified in the config file.
+  # port should match HostPort defined in pkg/api/http/config.go. Eventually this will be specified in the config file.
   EXPOSE 7685 
 
   # Run 
