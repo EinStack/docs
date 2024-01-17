@@ -51,6 +51,37 @@ Currently the only supported deployment is via container.
 
 3. **Build Docker Image:**
 
+  Create a Dockerfile in the project root. Below is a sample.
+
+    ```Dockerfile
+    # syntax=docker/dockerfile:1
+
+  FROM golang:1.22rc1-alpine3.19
+
+  # Set destination for COPY
+  WORKDIR /app
+
+  # Download Go modules
+  COPY go.mod go.sum ./
+  RUN go mod download
+
+  # Copy the source code. Note the slash at the end, as explained in
+  # https://docs.docker.com/engine/reference/builder/#copy
+  COPY . ./
+
+  # Build
+  RUN go build -o ./dist/glide
+
+  # port should match define in pkg/api/http/config.go. Eventually this will be specified in the config file.
+  EXPOSE 7685 
+
+  # Run 
+  # replace with the name of the config file in root
+  CMD ["./dist/glide", "-c", "./config.yaml"] 
+  ```
+  
+  Now that you have a Dockerfile, build the container.
+
     ```bash
     docker build -t <image_name> .
     ```
