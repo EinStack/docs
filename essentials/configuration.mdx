@@ -95,4 +95,16 @@ routers:
           cohere:
             api_key: ${env:COHERE_API_KEY}
 
+    - id: cohere-openai-ab-test
+      strategy: round_robin
+      models:
+        - id: openai
+          weight: 30
+          openai:
+            api_key: ${env:OPENAI_API_KEY}
+        - id: cohere
+          weight: 70
+          octoml:
+            api_key: ${env:OCTOML_API_KEY}
+
     ```
