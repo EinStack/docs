@@ -67,5 +67,10 @@
   "footerSocials": {
     "github": "https://github.com/EinStack"
   },
-    "openapi": ["api-reference/openapi.yaml"]
+  "openapi": ["api-reference/openapi.yaml"],
+  "analytics": {
+    "ga4": {
+      "measurementId": "G-GVLV05SWSH"
+    }
+  }
 }
