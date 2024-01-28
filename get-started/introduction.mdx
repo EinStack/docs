@@ -22,8 +22,8 @@ Glide provides a simplified way to build application resilience, reduce latency,
     <Card title="The True Gateway" icon="wand-magic-sparkles">
         Focus on **your business logic** and application while letting Glide handle common LLMOps problems (like fallbacks, cost control, routing, caching, etc.)
     </Card>
-    <Card title="Blazing-Fast" icon="bolt">
-        High performance and scalability are our priority, so we don't slow you down
+    <Card title="Blazing-Fast & Cloud-Native" icon="bolt">
+        High performance and scalability are our priority, so we don't slow you down and scale out as you grow.
     </Card>
     <Card title="Resilient" icon="scale-balanced">
         Glide is designed around resiliency and failures,
@@ -42,7 +42,13 @@ Glide provides a simplified way to build application resilience, reduce latency,
 
 ## Features
 
-- TBU
+- **Unified API**: Change your model providers without a need to modify your applications
+- **High Performance**: Written in [Golang](https://go.dev/) with the best practices of software development in a cloud-native environments in mind
+- Flexible **routing** across several models and various strategies like [the least latency](/essentials/routers#least-latency-router), [weighted round-robin](http://localhost:3000/essentials/routers#weighted-round-robin-router), [round-robin](http://localhost:3000/essentials/routers#round-robin-router), [priority-based routing](/essentials/routers#priority-router). All strategies include **low-latency fallback mechanisms** to ensure resiliency
+- Support [Popular LLM providers](/essentials/providers)
+- **Centralized** configuration and API key management
+- **Production-ready Observability**: Always know what's going on with the heart of your system via logs, metrics, and traces. [OpenTelemetry](https://opentelemetry.io/) is natively supported (coming soon).
+- and [much more is coming](https://github.com/EinStack/glide/blob/develop/ROADMAP.md)
 
 ## Installation
 

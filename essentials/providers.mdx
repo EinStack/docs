@@ -5,10 +5,13 @@ description: 'Provider Configurations'
 
 ## Currently Supported Providers
 
-- OpenAI
+- [OpenAI](https://openai.com/)
 - Azure OpenAI
-- Cohere
-- OctoML
+- [Cohere](https://cohere.com/)
+- [Anthropic](https://www.anthropic.com/)
+- [OctoML](https://octo.ai/)
+- [LocalAI](https://localai.io/)
+- more is coming
 
 ## OpenAI
 
@@ -17,7 +20,7 @@ Below are the default_params & model for OpenAI. Specify override values in the 
 ```yaml
 model: "gpt-3.5-turbo"
 default_params:
-    temperature: 0.8 # number between 0 - 2 
+    temperature: 0.8 # number between 0 - 2
     top_p: 1
     max_tokens: 100
     n: 1
@@ -40,7 +43,7 @@ There is no default model for Azure OpenAI.
 
 ```yaml
 default_params:
-    temperature: 0.8 # number between 0 - 2 
+    temperature: 0.8 # number between 0 - 2
     top_p: 1
     max_tokens: 100
     n: 1
@@ -79,9 +82,9 @@ default_params:
 Below are the default_params & model for OctoML. Specify override values in the `config.yaml` file.
 
 ```yaml
-model: "mistral-7b-instruct-fp16" 
+model: "mistral-7b-instruct-fp16"
 default_params:
-  temperature: 1 # number between 0 - 2 
+  temperature: 1 # number between 0 - 2
   top_p: 1
   max_tokens: 100
   stop:
