@@ -2,10 +2,10 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Glide",
   "logo": {
-    "dark": "images/DALLE_2023-12-10_13.png",
-    "light": "images/DALLE_2023-12-10_13.png"
+    "dark": "/images/glide_bird_in_circle.png",
+    "light": "/images/glide_bird_in_circle.png"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/images/glide_bird_in_circle.png",
   "colors": {
     "primary": "#0D9373",
     "light": "#07C983",
@@ -15,10 +15,19 @@
       "to": "#07C983"
     }
   },
+  "feedback": {
+    "suggestEdit": true,
+    "raiseIssue": true,
+    "thumbsRating": true
+  },
+  "topbarCtaButton": {
+    "type": "github",
+    "url": "https://github.com/einstack/glide"
+  },
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mkrueger190@gmail.com"
+      "url": "https://github.com/EinStack/glide/discussions/categories/general"
     }
   ],
   "tabs": [
@@ -31,19 +40,31 @@
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/EinStack/glide/tree/develop"
+      "url": "https://github.com/EinStack/glide/"
     },
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://discord.gg/z4DmAbJP"
+      "url": "https://discord.gg/WQEt4KZmpA"
+    },
+    {
+      "name": "Changelog",
+      "icon": "list",
+      "url": "https://github.com/EinStack/glide/blob/develop/CHANGELOG.md"
+    },
+    {
+      "name": "Roadmap",
+      "icon": "map",
+      "url": "https://github.com/EinStack/glide/blob/develop/ROADMAP.md"
     }
   ],
   "navigation": [
     {
       "group": "Get Started",
       "pages": [
-        "introduction"
+        "get-started/introduction",
+        "get-started/docker",
+        "get-started/local-installation"
       ]
     },
     {
@@ -65,7 +86,8 @@
     }
   ],
   "footerSocials": {
-    "github": "https://github.com/EinStack"
+    "github": "https://github.com/EinStack",
+    "discord": "https://discord.gg/WQEt4KZmpA"
   },
   "openapi": ["api-reference/openapi.yaml"],
   "analytics": {
