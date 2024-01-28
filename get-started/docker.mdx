@@ -3,74 +3,48 @@ title: Docker
 description: 'How to install and run Glide via Docker'
 ---
 
-## Config
+The easiest and quickest way to run Glide is via our [demo repository](https://github.com/EinStack/glide-demo.git) and [docker-compose](https://docs.docker.com/compose/).
 
-The initial phase in deploying Glide involves setting up your configuration file in the project root. For the basic setup, it is essential to have at least one pool with a minimum of one model.
-```yaml
-routers:
-  language:
-    - id: my-chat-router
-      strategy: priority
-      models:
-        - id: primary
-          openai:
-            api_key: "XXXXXXXXX"
-```
-
-#### Deployment
-
-Currently, the only supported deployment is via container.
-
-#### Docker
-
-1. **Install Git:**
-Ensure that Git is installed on your machine. You can download it from [Git's official website](https://git-scm.com/).
-
-2. **Clone the Repository:**
-Open a terminal or command prompt and paste the code below:
+## Clone the demo repository
 
 ```bash
-git clone https://github.com/EinStack/glide.git
-   ```
+git clone https://github.com/EinStack/glide-demo.git
+```
 
-3. **Build Docker Image:**
+## Init Configs
 
-Create a Dockerfile in the project root. Below is a sample.
+The demo repository comes with a basic config (learn more about [configurations]()). Additionally, you need to init your secrets by running:
 
-    ```Dockerfile
-    # syntax=docker/dockerfile:1
+```bash
+make init # from the demo root
+```
 
-FROM golang:1.22rc1-alpine3.19
+This will create the `secrets` directory with one `.OPENAI_API_KEY` file that you need to put your key to.
 
-# Set destination for COPY
-WORKDIR /app
+## Start Glide
 
-# Download Go modules
-COPY go.mod go.sum ./
-RUN go mod download
+After that, just use docker compose via this command to start your demo environment:
 
-# Copy the source code. Note the slash at the end, as explained in
-# https://docs.docker.com/engine/reference/builder/#copy
-COPY . ./
+```bash
+make up
+```
 
-# Build
-RUN go build -o ./dist/glide
+## Sample API Request to `/chat` endpoint
 
-# Update HostPort in pkg/api/http/config.go to 0.0.0.0:9099. Eventually this will be specified in the config file.
-EXPOSE 9099
+```json
+{
+ "message":
+      {
+        "role": "user",
+        "content": "Where was it played?"
+      },
+    "messageHistory": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "Who won the world series in 2020?"},
+      {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."}
+    ]
+}
+```
 
-# Run
-# replace with the name of the config file in root
-CMD ["./dist/glide", "-c", "./config.yaml"]
-  ```
-
-  Now that you have a Dockerfile, build the container.
-
-    ```bash
-    docker build -t <image_name> .
-    ```
-
-4. **Deploy:**
-   Deploy the image to your prefered image hosting platform.
-
+See [API Reference](/api-reference/introduction) for more details.
 
