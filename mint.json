@@ -63,8 +63,14 @@
       "group": "Get Started",
       "pages": [
         "get-started/introduction",
-        "get-started/docker",
-        "get-started/local-installation"
+        {
+          "group": "Installation",
+          "pages": [
+            "get-started/docker-installation",
+            "get-started/local-installation"
+          ]
+        },
+        "get-started/concepts"
       ]
     },
     {
@@ -89,7 +95,7 @@
     "github": "https://github.com/EinStack",
     "discord": "https://discord.gg/WQEt4KZmpA"
   },
-  "openapi": ["api-reference/openapi.yaml"],
+  "openapi": "https://raw.githubusercontent.com/EinStack/glide/develop/docs/swagger.json",
   "analytics": {
     "ga4": {
       "measurementId": "G-GVLV05SWSH"

@@ -15,14 +15,13 @@ There are more details on each router below but first let's look at a simple exa
 ## Example: Deploy a Resilience Router
 
 A Resilience Router provides failover logic should a target model not be available. Below are building a router called `my-chat-router`.
-'my-chat-router' is defined as a `language` router which accesses the `/chat` endpoints for supported providers. Additionally, we've specified this router to 
+'my-chat-router' is defined as a `language` router which accesses the `/chat` endpoints for supported providers. Additionally, we've specified this router to
 have a `priority` strategy which implements failover logic.
 
-This router will first try Openai (default model: `gpt-3.5-turbo`) once the router token budget has been drawn down (more info below) the router will failover to 
+This router will first try Openai (default model: `gpt-3.5-turbo`) once the router token budget has been drawn down (more info below) the router will failover to
 an Azure OpenAI deployment.
 
 Simple as that! Below we will cover each router in detail.
-
 
 ```yaml
 routers:
@@ -44,7 +43,7 @@ routers:
 
 Unlike other LLM routers, the failover router employs a token bucket based failover strategy to reduce the latency on primary model failure. When a failure occurs, the router directs the API call to the secondary model instead of retrying the primary. **The entire service instance keeps track of the number of failures for a specific model.** Once that number surpasses a certain threshold, the model is "disqualified" from serving requests for a temporary period. This proactive approach involves removing the problematic model from the pool as soon as it experiences issues, ensuring that subsequent requests are handled by healthy models only, significantly improving latency during failover compared to alternative methods.
 
-The router comes with a handy and flexible abstraction called error budget. Error budget is a number of errors you allow to tolerate before calling the model unhealthy and is defined in errors/second. As a final measure the router employs retries with backoff. This is done explicitly only when we have no other choice - such as all configured models are down. 
+The router comes with a handy and flexible abstraction called error budget. Error budget is a number of errors you allow to tolerate before calling the model unhealthy and is defined in errors/second. As a final measure the router employs retries with backoff. This is done explicitly only when we have no other choice - such as all configured models are down.
 
 ## Least Latency Router
 
@@ -60,7 +59,7 @@ Round-robin routing iterates through a list of models sending the call until a `
 
 ## Weighted Round-Robin Router
 
-Weighted round-robin sends API traffic proportional to the weight assigned in the `config.yaml`. 
+Weighted round-robin sends API traffic proportional to the weight assigned in the `config.yaml`.
 
 In the below example 80% of traffic will be served to Model A with 10% sent each to Model B and Model C.
 
