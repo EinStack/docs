@@ -3,7 +3,7 @@ title: 'Configuration'
 description: 'How to Configure the Gateway'
 ---
 
-Below details how to configure gateway. For more information on router types see the router page.
+Below details how to configure Glide. For more information on router types see the router page.
 
 ## Basic Configuration
 
@@ -12,7 +12,7 @@ At its simplest the gateway can be configured with a single router and two model
 This example shows a failover router leveraging OpenAI and Azure OpenAI. For OpenAI, Cohere, and OctoML, only an API key needs to be provided.
 All other parameters, including the model, are provided by default. For Azure OpenAI, a model and base_url must be specified.
 
-- `language` - This is the language API endpoint which supporta `/chat` endpoints from model providers
+- `language` - This is the language API endpoint which support a `/chat` endpoints from model providers
 - `id` - A unique id for your router
 - `strategy` - The type of router can be round-robin, weighted-round-robin, least-latency, priority
 - `models/id` - **TODO: what values can this be?** A unique ID for the model configuration
@@ -35,7 +35,7 @@ routers:
 
 ## Advanced Configuration
 
-Additional, parameters can be specified in the configuration as well. Refer to the `Providers` page for more information on paramters.
+Additionally, parameters can be specified in the configuration as well. Refer to the `Providers` page for more information on parameters.
 
 ```yaml
 telemetry:
@@ -79,7 +79,7 @@ routers:
           openai:
             model: gpt-3.5-turbo
             api_key: ${env:OPENAI_API_KEY}
-        
+
         - id: secondary
           timeout_ms: 200
           cohere:

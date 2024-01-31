@@ -9,12 +9,12 @@ description: 'Control Your API Calls'
 
 ## Introduction
 
-Routers are a core concept in Glide. They are most easily thought of a pools of models that execute predefine logic on your API calls.
+Routers are a core concept in Glide. They are most easily thought of a pool of models that execute predefined logic on your API calls.
 There are more details on each router below but first let's look at a simple example.
 
 ## Example: Deploy a Resilience Router
 
-A Resilience Router provides failover logic should a target model not be available. Below are building a router called `my-chat-router`.
+A Resilience Router provides failover logic should a target model not be available. Below is a router called `my-chat-router`.
 'my-chat-router' is defined as a `language` router which accesses the `/chat` endpoints for supported providers. Additionally, we've specified this router to
 have a `priority` strategy which implements failover logic.
 
