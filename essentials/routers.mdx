@@ -51,8 +51,6 @@ This router selects the model with the lowest average latency over time. If the 
 Since we don't know the true distribution of model latencies, we attempt to estimate it and keep it updated over time. Over time, old latency data is weighted lower and eventually dropped from the average latency calculation.
 This ensures latencies are constantly updated.
 
-#### TODO: How are latencies normalized to token generation count?
-
 ## Round-Robin Router
 
 Round-robin routing iterates through a list of models sending the call until a `200` response is returned. This differs from priority as there is no token bucket to track api health across the instance.

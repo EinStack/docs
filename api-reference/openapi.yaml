@@ -160,7 +160,6 @@ components:
           type: integer
         response_format:
           type: object
-          description: "TODO: should this be a part of the chat request API?"
         seed:
           type: integer
         stop:
@@ -328,7 +327,6 @@ components:
           type: integer
         response_format:
           type: object
-          description: "TODO: should this be a part of the chat request API?"
         seed:
           type: integer
         stop:
