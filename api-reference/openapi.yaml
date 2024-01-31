@@ -1,22 +1,26 @@
 openapi: 3.0.1
 info:
-  title: Glide Gateway
+  title: Glide
   description: "API documentation for Glide, an open-source lightweight high-performance\
     \ model gateway"
   contact:
     name: Glide Community
-    url: https://github.com/modelgateway/glide
+    url: https://github.com/EinStack/glide/discussions/categories/general
+    email: contact@einstack.ai
   license:
     name: Apache 2.0
-    url: https://github.com/modelgateway/glide/blob/develop/LICENSE
-  version: "1.0"
+    url: https://github.com/EinStack/glide/blob/develop/LICENSE
+  version: 0.0.1
+externalDocs:
+  description: Documentation
+  url: https://glide.einstack.ai/
 servers:
-- url: http://localhost:9099/
+  - url: http://localhost:9099/
 paths:
   /v1/health/:
     get:
       tags:
-      - Operations
+        - Operations
       summary: Gateway Health
       operationId: glide-health
       responses:
@@ -29,7 +33,7 @@ paths:
   /v1/language/:
     get:
       tags:
-      - Language
+        - Language
       summary: Language Router List
       description: Retrieve list of configured language routers and their configurations
       operationId: glide-language-routers
@@ -43,17 +47,17 @@ paths:
   /v1/language/{router}/chat:
     post:
       tags:
-      - Language
+        - Language
       summary: Language Chat
       description: Talk to different LLMs Chat API via unified endpoint
       operationId: glide-language-chat
       parameters:
-      - name: router
-        in: path
-        description: Router ID
-        required: true
-        schema:
-          type: string
+        - name: router
+          in: path
+          description: Router ID
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Request Data
         content:
@@ -83,11 +87,45 @@ paths:
       x-codegen-request-body-name: payload
 components:
   schemas:
+    anthropic.Config:
+      required:
+        - baseUrl
+        - chatEndpoint
+        - model
+      type: object
+      properties:
+        baseUrl:
+          type: string
+        chatEndpoint:
+          type: string
+        defaultParams:
+          $ref: '#/components/schemas/anthropic.Params'
+        model:
+          type: string
+    anthropic.Params:
+      type: object
+      properties:
+        max_tokens:
+          type: integer
+        metadata:
+          type: string
+        stop:
+          type: array
+          items:
+            type: string
+        system:
+          type: string
+        temperature:
+          type: number
+        top_k:
+          type: integer
+        top_p:
+          type: number
     azureopenai.Config:
       required:
-      - apiVersion
-      - baseUrl
-      - model
+        - apiVersion
+        - baseUrl
+        - model
       type: object
       properties:
         apiVersion:
@@ -157,9 +195,9 @@ components:
           type: string
     cohere.Config:
       required:
-      - baseUrl
-      - chatEndpoint
-      - model
+        - baseUrl
+        - chatEndpoint
+        - model
       type: object
       properties:
         baseUrl:
@@ -228,9 +266,9 @@ components:
           description: The number of latency probes required to init moving average
     octoml.Config:
       required:
-      - baseUrl
-      - chatEndpoint
-      - model
+        - baseUrl
+        - chatEndpoint
+        - model
       type: object
       properties:
         baseUrl:
@@ -260,9 +298,9 @@ components:
           type: number
     openai.Config:
       required:
-      - baseUrl
-      - chatEndpoint
-      - model
+        - baseUrl
+        - chatEndpoint
+        - model
       type: object
       properties:
         baseUrl:
@@ -311,9 +349,12 @@ components:
           type: string
     providers.LangModelConfig:
       required:
-      - id
+        - enabled
+        - id
       type: object
       properties:
+        anthropic:
+          $ref: '#/components/schemas/anthropic.Config'
         azureopenai:
           $ref: '#/components/schemas/azureopenai.Config'
         client:
@@ -333,7 +374,10 @@ components:
         octoml:
           $ref: '#/components/schemas/octoml.Config'
         openai:
-          $ref: '#/components/schemas/openai.Config'
+          type: object
+          description: Add other providers like
+          allOf:
+            - $ref: '#/components/schemas/openai.Config'
         weight:
           type: integer
     retry.ExpRetryConfig:
@@ -349,14 +393,18 @@ components:
           type: integer
     routers.LangRouterConfig:
       required:
-      - models
-      - routers
+        - enabled
+        - models
+        - retry
+        - routers
+        - strategy
       type: object
       properties:
         enabled:
           type: boolean
           description: Is router enabled?
         models:
+          minItems: 1
           type: array
           description: the list of models that could handle requests
           items:
@@ -365,7 +413,7 @@ components:
           type: object
           description: retry when no healthy model is available to router
           allOf:
-          - $ref: '#/components/schemas/retry.ExpRetryConfig'
+            - $ref: '#/components/schemas/retry.ExpRetryConfig'
         routers:
           type: string
           description: Unique router ID
@@ -387,6 +435,13 @@ components:
           type: string
           description: "The role of the author of this message. One of system, user,\
             \ or assistant."
+    schemas.OverrideChatRequest:
+      type: object
+      properties:
+        message:
+          $ref: '#/components/schemas/schemas.ChatMessage'
+        model_id:
+          type: string
     schemas.ProviderResponse:
       type: object
       properties:
@@ -397,8 +452,8 @@ components:
           additionalProperties:
             type: string
         tokenCount:
-          $ref: '#/components/schemas/schemas.TokenCount'
-    schemas.TokenCount:
+          $ref: '#/components/schemas/schemas.TokenUsage'
+    schemas.TokenUsage:
       type: object
       properties:
         promptTokens:
@@ -416,6 +471,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/schemas.ChatMessage'
+        override:
+          $ref: '#/components/schemas/schemas.OverrideChatRequest'
     schemas.UnifiedChatResponse:
       type: object
       properties:

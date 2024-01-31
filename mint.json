@@ -63,8 +63,14 @@
       "group": "Get Started",
       "pages": [
         "get-started/introduction",
-        "get-started/docker",
-        "get-started/local-installation"
+        {
+          "group": "Installation",
+          "pages": [
+            "get-started/docker-installation",
+            "get-started/local-installation"
+          ]
+        },
+        "get-started/concepts"
       ]
     },
     {
