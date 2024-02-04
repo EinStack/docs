@@ -19,6 +19,10 @@ The easiest and quickest way to run Glide is via our [demo repository](https://g
         ```
 
         This will create the `secrets` directory with one `.OPENAI_API_KEY` file that you need to put your key to.
+
+        <Info>
+            Windows user should create the `secrets` directory and the corresponding `secrets/.OPENAI_API_KEY` file manually.
+        </Info>
     </Step>
     <Step title={"Start Glide"}>
         After that, just use docker compose via this command to start your demo environment:
@@ -26,6 +30,10 @@ The easiest and quickest way to run Glide is via our [demo repository](https://g
         ```bash
         make up
         ```
+
+        <Info>
+            Windows users should simply run `docker-compose up -d`
+        </Info>
     </Step>
     <Step title={"Sample API Request to `/chat` endpoint"}>
         ```json
