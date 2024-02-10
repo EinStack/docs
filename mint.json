@@ -77,8 +77,8 @@
       "group": "Essentials",
       "pages": [
         "essentials/configuration",
-        "essentials/providers",
-        "essentials/routers"
+        "essentials/routers",
+        "essentials/providers"
       ]
     },
     {
