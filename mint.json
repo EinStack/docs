@@ -67,7 +67,8 @@
           "group": "Installation",
           "pages": [
             "get-started/docker-installation",
-            "get-started/local-installation"
+            "get-started/local-installation",
+            "get-started/kubernetes-installation"
           ]
         },
         "get-started/concepts"
