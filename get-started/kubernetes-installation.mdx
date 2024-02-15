@@ -1,0 +1,45 @@
+---
+title: Kubernetes
+description: How to install Glide into a Kubernetes cluster
+---
+
+EinStack provides you with [an official flexible Helm chart](https://artifacthub.io/packages/helm/einstack/glide) to install Glide into a Kubernetes cluster.
+
+Before moving on, please make sure you have [Helm CLI](https://helm.sh/) and [kubectl](https://kubernetes.io/docs/reference/kubectl/) installed locally.
+
+<Steps>
+    <Step title={"Add EinStack chart repository"}>
+        ```bash
+        helm repo add einstack https://einstack.github.io/helm-charts
+        helm repo update
+        ```
+    </Step>
+    <Step title={"Create a Kubernetes Secret"}>
+        Before installing the Helm chart, you need to create a Kubernetes secret with your API keys like:
+
+        ```bash
+        kubectl create secret generic api-keys --from-literal=OPENAI_API_KEY=sk-abcdXYZ
+        ```
+
+        By default, Glide's chart comes with a configuration that contains [one language router]() with one OpenAI model that requires to put API key under the `OPENAI_API_KEY` environment variable.
+    </Step>
+    <Step title={"Use the Secret"}>
+        Then, you need to create a custom `values.yaml` file to override the secret name like:
+        ```yaml
+        # save as custom.values.yaml, for example
+        glide:
+            apiKeySecret: "api-keys"
+        ```
+    </Step>
+    <Step title={"Deploy Glide's chart 🚀"}>
+        Finally, you should be able to install Glide's chart via:
+
+        ```yaml
+        helm upgrade glide-gateway einstack/glide --values custom.values.yaml --install
+        ```
+
+        Please make sure your kubectl context is pointing to the right cluster and authenticated to do the deployment.
+    </Step>
+</Steps>
+
+Once the deployment is done, you should be able to see a new `glide-gateway` deployment and corresponding pods in the namespace you used during the deployment.
