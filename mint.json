@@ -88,6 +88,7 @@
         "api-reference/introduction",
         "api-reference/language/language-router-list",
         "api-reference/language/language-chat",
+        "api-reference/language/language-chat-stream",
         "api-reference/operations/gateway-health"
       ]
     }
