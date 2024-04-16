@@ -17,477 +17,633 @@ externalDocs:
 servers:
   - url: http://localhost:9099/
 paths:
+ basePath: /
+definitions:
+  anthropic.Config:
+    properties:
+      apiVersion:
+        type: string
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/anthropic.Params'
+      model:
+        type: string
+    required:
+    - apiVersion
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  anthropic.Params:
+    properties:
+      max_tokens:
+        type: integer
+      metadata:
+        type: string
+      stop:
+        items:
+          type: string
+        type: array
+      system:
+        type: string
+      temperature:
+        type: number
+      top_k:
+        type: integer
+      top_p:
+        type: number
+    type: object
+  azureopenai.Config:
+    properties:
+      apiVersion:
+        description: The API version to use for this operation. This follows the YYYY-MM-DD
+          format (e.g 2023-05-15)
+        type: string
+      baseUrl:
+        description: The name of your Azure OpenAI Resource (e.g https://glide-test.openai.azure.com/)
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/azureopenai.Params'
+      model:
+        description: This is your deployment name. You're required to first deploy
+          a model before you can make calls (e.g. glide-gpt-35)
+        type: string
+    required:
+    - apiVersion
+    - baseUrl
+    - model
+    type: object
+  azureopenai.Params:
+    properties:
+      frequency_penalty:
+        type: integer
+      logit_bias:
+        additionalProperties:
+          type: number
+        type: object
+      max_tokens:
+        type: integer
+      "n":
+        type: integer
+      presence_penalty:
+        type: integer
+      response_format:
+        description: 'TODO: should this be a part of the chat request API?'
+      seed:
+        type: integer
+      stop:
+        items:
+          type: string
+        type: array
+      temperature:
+        type: number
+      tool_choice: {}
+      tools:
+        items:
+          type: string
+        type: array
+      top_p:
+        type: number
+      user:
+        type: string
+    type: object
+  bedrock.Config:
+    properties:
+      awsRegion:
+        type: string
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/bedrock.Params'
+      model:
+        type: string
+    required:
+    - awsRegion
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  bedrock.Params:
+    properties:
+      max_tokens:
+        type: integer
+      stop:
+        items:
+          type: string
+        type: array
+      temperature:
+        type: number
+      top_p:
+        type: number
+    type: object
+  clients.ClientConfig:
+    properties:
+      timeout:
+        type: string
+    type: object
+  cohere.ChatHistory:
+    properties:
+      message:
+        type: string
+      role:
+        type: string
+      user:
+        type: string
+    type: object
+  cohere.Config:
+    properties:
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/cohere.Params'
+      model:
+        type: string
+    required:
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  cohere.Params:
+    properties:
+      chat_history:
+        items:
+          $ref: '#/definitions/cohere.ChatHistory'
+        type: array
+      citiation_quality:
+        type: string
+      connectors:
+        items:
+          type: string
+        type: array
+      conversation_id:
+        type: string
+      preamble_override:
+        type: string
+      prompt_truncation:
+        type: string
+      search_queries_only:
+        type: boolean
+      stream:
+        type: boolean
+      temperature:
+        type: number
+    type: object
+  http.ErrorSchema:
+    properties:
+      message:
+        type: string
+    type: object
+  http.HealthSchema:
+    properties:
+      healthy:
+        type: boolean
+    type: object
+  http.RouterListSchema:
+    properties:
+      routers:
+        items:
+          $ref: '#/definitions/routers.LangRouterConfig'
+        type: array
+    type: object
+  latency.Config:
+    properties:
+      decay:
+        description: Weight of new latency measurements
+        type: number
+      update_interval:
+        description: How often gateway should probe models with not the lowest response
+          latency
+        type: string
+      warmup_samples:
+        description: The number of latency probes required to init moving average
+        type: integer
+    type: object
+  octoml.Config:
+    properties:
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/octoml.Params'
+      model:
+        type: string
+    required:
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  octoml.Params:
+    properties:
+      frequency_penalty:
+        type: integer
+      max_tokens:
+        type: integer
+      presence_penalty:
+        type: integer
+      stop:
+        items:
+          type: string
+        type: array
+      temperature:
+        type: number
+      top_p:
+        type: number
+    type: object
+  ollama.Config:
+    properties:
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/ollama.Params'
+      model:
+        type: string
+    required:
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  ollama.Params:
+    properties:
+      microstat:
+        type: integer
+      microstat_eta:
+        type: number
+      microstat_tau:
+        type: number
+      num_ctx:
+        type: integer
+      num_gpu:
+        type: integer
+      num_gqa:
+        type: integer
+      num_predict:
+        type: integer
+      num_thread:
+        type: integer
+      repeat_last_n:
+        type: integer
+      seed:
+        type: integer
+      stop:
+        items:
+          type: string
+        type: array
+      stream:
+        type: boolean
+      temperature:
+        type: number
+      tfs_z:
+        type: number
+      top_k:
+        type: integer
+      top_p:
+        type: number
+    type: object
+  openai.Config:
+    properties:
+      baseUrl:
+        type: string
+      chatEndpoint:
+        type: string
+      defaultParams:
+        $ref: '#/definitions/openai.Params'
+      model:
+        type: string
+    required:
+    - baseUrl
+    - chatEndpoint
+    - model
+    type: object
+  openai.Params:
+    properties:
+      frequency_penalty:
+        type: integer
+      logit_bias:
+        additionalProperties:
+          type: number
+        type: object
+      max_tokens:
+        type: integer
+      "n":
+        type: integer
+      presence_penalty:
+        type: integer
+      response_format:
+        description: 'TODO: should this be a part of the chat request API?'
+      seed:
+        type: integer
+      stop:
+        items:
+          type: string
+        type: array
+      temperature:
+        type: number
+      tool_choice: {}
+      tools:
+        items:
+          type: string
+        type: array
+      top_p:
+        type: number
+      user:
+        type: string
+    type: object
+  providers.LangModelConfig:
+    properties:
+      anthropic:
+        $ref: '#/definitions/anthropic.Config'
+      azureopenai:
+        $ref: '#/definitions/azureopenai.Config'
+      bedrock:
+        $ref: '#/definitions/bedrock.Config'
+      client:
+        $ref: '#/definitions/clients.ClientConfig'
+      cohere:
+        $ref: '#/definitions/cohere.Config'
+      enabled:
+        description: Is the model enabled?
+        type: boolean
+      error_budget:
+        type: string
+      id:
+        description: Model instance ID (unique in scope of the router)
+        type: string
+      latency:
+        $ref: '#/definitions/latency.Config'
+      octoml:
+        $ref: '#/definitions/octoml.Config'
+      ollama:
+        $ref: '#/definitions/ollama.Config'
+      openai:
+        allOf:
+        - $ref: '#/definitions/openai.Config'
+        description: Add other providers like
+      weight:
+        type: integer
+    required:
+    - enabled
+    - id
+    type: object
+  retry.ExpRetryConfig:
+    properties:
+      base_multiplier:
+        type: integer
+      max_delay:
+        type: integer
+      max_retries:
+        type: integer
+      min_delay:
+        type: integer
+    type: object
+  routers.LangRouterConfig:
+    properties:
+      enabled:
+        description: Is router enabled?
+        type: boolean
+      models:
+        description: the list of models that could handle requests
+        items:
+          $ref: '#/definitions/providers.LangModelConfig'
+        minItems: 1
+        type: array
+      retry:
+        allOf:
+        - $ref: '#/definitions/retry.ExpRetryConfig'
+        description: retry when no healthy model is available to router
+      routers:
+        description: Unique router ID
+        type: string
+      strategy:
+        description: strategy on picking the next model to serve the request
+        type: string
+    required:
+    - enabled
+    - models
+    - retry
+    - routers
+    - strategy
+    type: object
+  schemas.ChatMessage:
+    properties:
+      content:
+        description: The content of the message.
+        type: string
+      name:
+        description: |-
+          The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores,
+          with a maximum length of 64 characters.
+        type: string
+      role:
+        description: The role of the author of this message. One of system, user,
+          or assistant.
+        type: string
+    required:
+    - content
+    - role
+    type: object
+  schemas.ChatRequest:
+    properties:
+      message:
+        $ref: '#/definitions/schemas.ChatMessage'
+      messageHistory:
+        items:
+          $ref: '#/definitions/schemas.ChatMessage'
+        type: array
+      override:
+        $ref: '#/definitions/schemas.OverrideChatRequest'
+    required:
+    - message
+    type: object
+  schemas.ChatResponse:
+    properties:
+      cached:
+        type: boolean
+      created:
+        type: integer
+      id:
+        type: string
+      model:
+        type: string
+      model_id:
+        type: string
+      modelResponse:
+        $ref: '#/definitions/schemas.ModelResponse'
+      provider:
+        type: string
+      router:
+        type: string
+    type: object
+  schemas.ModelResponse:
+    properties:
+      message:
+        $ref: '#/definitions/schemas.ChatMessage'
+      responseId:
+        additionalProperties:
+          type: string
+        type: object
+      tokenCount:
+        $ref: '#/definitions/schemas.TokenUsage'
+    type: object
+  schemas.OverrideChatRequest:
+    properties:
+      message:
+        $ref: '#/definitions/schemas.ChatMessage'
+      model_id:
+        type: string
+    required:
+    - message
+    - model_id
+    type: object
+  schemas.TokenUsage:
+    properties:
+      promptTokens:
+        type: integer
+      responseTokens:
+        type: integer
+      totalTokens:
+        type: integer
+    type: object
+externalDocs:
+  description: Documentation
+  url: https://glide.einstack.ai/
+host: localhost:9099
+info:
+  contact:
+    email: contact@einstack.ai
+    name: EinStack Community
+    url: https://github.com/EinStack/glide/
+  description: API documentation for Glide, an open-source lightweight high-performance
+    model gateway
+  license:
+    name: Apache 2.0
+    url: https://github.com/EinStack/glide/blob/develop/LICENSE
+  title: Glide
+  version: 0.0.1
+paths:
   /v1/health/:
     get:
-      tags:
-        - Operations
-      summary: Gateway Health
+      consumes:
+      - application/json
       operationId: glide-health
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/http.HealthSchema'
+          schema:
+            $ref: '#/definitions/http.HealthSchema'
+      summary: Gateway Health
+      tags:
+      - Operations
   /v1/language/:
     get:
-      tags:
-        - Language
-      summary: Language Router List
+      consumes:
+      - application/json
       description: Retrieve list of configured language routers and their configurations
       operationId: glide-language-routers
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/http.RouterListSchema'
+          schema:
+            $ref: '#/definitions/http.RouterListSchema'
+      summary: Language Router List
+      tags:
+      - Language
   /v1/language/{router}/chat:
     post:
-      tags:
-        - Language
-      summary: Language Chat
-      description: Talk to different LLMs Chat API via unified endpoint
+      consumes:
+      - application/json
+      description: Talk to different LLM Chat APIs via unified endpoint
       operationId: glide-language-chat
       parameters:
-        - name: router
-          in: path
-          description: Router ID
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Request Data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/schemas.UnifiedChatRequest'
+      - description: Router ID
+        in: path
+        name: router
         required: true
+        type: string
+      - description: Request Data
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ChatRequest'
+      produces:
+      - application/json
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/schemas.UnifiedChatResponse'
+          schema:
+            $ref: '#/definitions/schemas.ChatResponse'
         "400":
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/http.ErrorSchema'
+          schema:
+            $ref: '#/definitions/http.ErrorSchema'
         "404":
           description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/http.ErrorSchema'
-      x-codegen-request-body-name: payload
-components:
-  schemas:
-    anthropic.Config:
-      required:
-        - baseUrl
-        - chatEndpoint
-        - model
-      type: object
-      properties:
-        baseUrl:
-          type: string
-        chatEndpoint:
-          type: string
-        defaultParams:
-          $ref: '#/components/schemas/anthropic.Params'
-        model:
-          type: string
-    anthropic.Params:
-      type: object
-      properties:
-        max_tokens:
-          type: integer
-        metadata:
-          type: string
-        stop:
-          type: array
-          items:
-            type: string
-        system:
-          type: string
-        temperature:
-          type: number
-        top_k:
-          type: integer
-        top_p:
-          type: number
-    azureopenai.Config:
-      required:
-        - apiVersion
-        - baseUrl
-        - model
-      type: object
-      properties:
-        apiVersion:
-          type: string
-          description: The API version to use for this operation. This follows the
-            YYYY-MM-DD format (e.g 2023-05-15)
-        baseUrl:
-          type: string
-          description: The name of your Azure OpenAI Resource (e.g https://glide-test.openai.azure.com/)
-        chatEndpoint:
-          type: string
-        defaultParams:
-          $ref: '#/components/schemas/azureopenai.Params'
-        model:
-          type: string
-          description: This is your deployment name. You're required to first deploy
-            a model before you can make calls (e.g. glide-gpt-35)
-    azureopenai.Params:
-      type: object
-      properties:
-        frequency_penalty:
-          type: integer
-        logit_bias:
-          type: object
-          additionalProperties:
-            type: number
-        max_tokens:
-          type: integer
-        "n":
-          type: integer
-        presence_penalty:
-          type: integer
-        response_format:
-          type: object
-        seed:
-          type: integer
-        stop:
-          type: array
-          items:
-            type: string
-        temperature:
-          type: number
-        tool_choice:
-          type: object
-        tools:
-          type: array
-          items:
-            type: string
-        top_p:
-          type: number
-        user:
-          type: string
-    clients.ClientConfig:
-      type: object
-      properties:
-        timeout:
-          type: string
-    cohere.ChatHistory:
-      type: object
-      properties:
-        message:
-          type: string
-        role:
-          type: string
-        user:
-          type: string
-    cohere.Config:
-      required:
-        - baseUrl
-        - chatEndpoint
-        - model
-      type: object
-      properties:
-        baseUrl:
-          type: string
-        chatEndpoint:
-          type: string
-        defaultParams:
-          $ref: '#/components/schemas/cohere.Params'
-        model:
-          type: string
-    cohere.Params:
-      type: object
-      properties:
-        chat_history:
-          type: array
-          items:
-            $ref: '#/components/schemas/cohere.ChatHistory'
-        citiation_quality:
-          type: string
-        connectors:
-          type: array
-          items:
-            type: string
-        conversation_id:
-          type: string
-        preamble_override:
-          type: string
-        prompt_truncation:
-          type: string
-        search_queries_only:
-          type: boolean
-        stream:
-          type: boolean
-          description: unsupported right now
-        temperature:
-          type: number
-    http.ErrorSchema:
-      type: object
-      properties:
-        message:
-          type: string
-    http.HealthSchema:
-      type: object
-      properties:
-        healthy:
-          type: boolean
-    http.RouterListSchema:
-      type: object
-      properties:
-        routers:
-          type: array
-          items:
-            $ref: '#/components/schemas/routers.LangRouterConfig'
-    latency.Config:
-      type: object
-      properties:
-        decay:
-          type: number
-          description: Weight of new latency measurements
-        update_interval:
-          type: string
-          description: How often gateway should probe models with not the lowest response
-            latency
-        warmup_samples:
-          type: integer
-          description: The number of latency probes required to init moving average
-    octoml.Config:
-      required:
-        - baseUrl
-        - chatEndpoint
-        - model
-      type: object
-      properties:
-        baseUrl:
-          type: string
-        chatEndpoint:
-          type: string
-        defaultParams:
-          $ref: '#/components/schemas/octoml.Params'
-        model:
-          type: string
-    octoml.Params:
-      type: object
-      properties:
-        frequency_penalty:
-          type: integer
-        max_tokens:
-          type: integer
-        presence_penalty:
-          type: integer
-        stop:
-          type: array
-          items:
-            type: string
-        temperature:
-          type: number
-        top_p:
-          type: number
-    openai.Config:
-      required:
-        - baseUrl
-        - chatEndpoint
-        - model
-      type: object
-      properties:
-        baseUrl:
-          type: string
-        chatEndpoint:
-          type: string
-        defaultParams:
-          $ref: '#/components/schemas/openai.Params'
-        model:
-          type: string
-    openai.Params:
-      type: object
-      properties:
-        frequency_penalty:
-          type: integer
-        logit_bias:
-          type: object
-          additionalProperties:
-            type: number
-        max_tokens:
-          type: integer
-        "n":
-          type: integer
-        presence_penalty:
-          type: integer
-        response_format:
-          type: object
-        seed:
-          type: integer
-        stop:
-          type: array
-          items:
-            type: string
-        temperature:
-          type: number
-        tool_choice:
-          type: object
-        tools:
-          type: array
-          items:
-            type: string
-        top_p:
-          type: number
-        user:
-          type: string
-    providers.LangModelConfig:
-      required:
-        - enabled
-        - id
-      type: object
-      properties:
-        anthropic:
-          $ref: '#/components/schemas/anthropic.Config'
-        azureopenai:
-          $ref: '#/components/schemas/azureopenai.Config'
-        client:
-          $ref: '#/components/schemas/clients.ClientConfig'
-        cohere:
-          $ref: '#/components/schemas/cohere.Config'
-        enabled:
-          type: boolean
-          description: Is the model enabled?
-        error_budget:
-          type: string
-        id:
-          type: string
-          description: Model instance ID (unique in scope of the router)
-        latency:
-          $ref: '#/components/schemas/latency.Config'
-        octoml:
-          $ref: '#/components/schemas/octoml.Config'
-        openai:
-          type: object
-          description: Add other providers like
-          allOf:
-            - $ref: '#/components/schemas/openai.Config'
-        weight:
-          type: integer
-    retry.ExpRetryConfig:
-      type: object
-      properties:
-        base_multiplier:
-          type: integer
-        max_delay:
-          type: integer
-        max_retries:
-          type: integer
-        min_delay:
-          type: integer
-    routers.LangRouterConfig:
-      required:
-        - enabled
-        - models
-        - retry
-        - routers
-        - strategy
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          description: Is router enabled?
-        models:
-          minItems: 1
-          type: array
-          description: the list of models that could handle requests
-          items:
-            $ref: '#/components/schemas/providers.LangModelConfig'
-        retry:
-          type: object
-          description: retry when no healthy model is available to router
-          allOf:
-            - $ref: '#/components/schemas/retry.ExpRetryConfig'
-        routers:
-          type: string
-          description: Unique router ID
-        strategy:
-          type: string
-          description: strategy on picking the next model to serve the request
-    schemas.ChatMessage:
-      type: object
-      properties:
-        content:
-          type: string
-          description: The content of the message.
-        name:
-          type: string
-          description: |-
-            The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores,
-            with a maximum length of 64 characters.
-        role:
-          type: string
-          description: "The role of the author of this message. One of system, user,\
-            \ or assistant."
-    schemas.OverrideChatRequest:
-      type: object
-      properties:
-        message:
-          $ref: '#/components/schemas/schemas.ChatMessage'
-        model_id:
-          type: string
-    schemas.ProviderResponse:
-      type: object
-      properties:
-        message:
-          $ref: '#/components/schemas/schemas.ChatMessage'
-        responseId:
-          type: object
-          additionalProperties:
-            type: string
-        tokenCount:
-          $ref: '#/components/schemas/schemas.TokenUsage'
-    schemas.TokenUsage:
-      type: object
-      properties:
-        promptTokens:
-          type: number
-        responseTokens:
-          type: number
-        totalTokens:
-          type: number
-    schemas.UnifiedChatRequest:
-      type: object
-      properties:
-        message:
-          $ref: '#/components/schemas/schemas.ChatMessage'
-        messageHistory:
-          type: array
-          items:
-            $ref: '#/components/schemas/schemas.ChatMessage'
-        override:
-          $ref: '#/components/schemas/schemas.OverrideChatRequest'
-    schemas.UnifiedChatResponse:
-      type: object
-      properties:
-        cached:
-          type: boolean
-        created:
-          type: integer
-        id:
-          type: string
-        model:
-          type: string
-        model_id:
-          type: string
-        modelResponse:
-          $ref: '#/components/schemas/schemas.ProviderResponse'
-        provider:
-          type: string
-        router:
-          type: string
-x-original-swagger-version: "2.0"
+          schema:
+            $ref: '#/definitions/http.ErrorSchema'
+      summary: Language Chat
+      tags:
+      - Language
+  /v1/language/{router}/chatStream:
+    get:
+      consumes:
+      - application/json
+      description: Talk to different LLM Stream Chat APIs via a unified websocket
+        endpoint
+      operationId: glide-language-chat-stream
+      parameters:
+      - description: Router ID
+        in: path
+        name: router
+        required: true
+        type: string
+      - description: Websocket Connection Type
+        in: header
+        name: Connection
+        required: true
+        type: string
+      - description: Upgrade header
+        in: header
+        name: Upgrade
+        required: true
+        type: string
+      - description: Websocket Security Token
+        in: header
+        name: Sec-WebSocket-Key
+        required: true
+        type: string
+      - description: Websocket Security Token
+        in: header
+        name: Sec-WebSocket-Version
+        required: true
+        type: string
+      responses:
+        "101":
+          description: Switching Protocols
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.ErrorSchema'
+        "426":
+          description: Upgrade Required
+      summary: Language Chat
+      tags:
+      - Language
+schemes:
+- http
+swagger: "2.0"
