@@ -96,7 +96,7 @@
     "github": "https://github.com/EinStack",
     "discord": "https://discord.gg/WQEt4KZmpA"
   },
-  "openapi": ["https://github.com/EinStack/glide/blob/develop/docs/swagger.json"],
+  "openapi": "https://github.com/EinStack/glide/blob/develop/docs/swagger.json",
   "analytics": {
     "ga4": {
       "measurementId": "G-GVLV05SWSH"
