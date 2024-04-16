@@ -17,7 +17,7 @@ externalDocs:
 servers:
   - url: http://localhost:9099/
 paths:
-  /v1/health/:
+  /v1//:
     get:
       tags:
         - Operations
